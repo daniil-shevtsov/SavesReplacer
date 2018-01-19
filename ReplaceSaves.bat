@@ -33,7 +33,7 @@ if "%ERRORLEVEL%" == "1" (
 		for /F "tokens=1,2 delims=# " %%i in (%GAMES_FILE_NAME%) do (
 			echo "%%i" and "%%j"
 			
-			
+			robocopy %PROFILES_LOCATION%\!profileName!\%%i %%j /e
 		) 
 	) || (
 		echo profile "!profileName!" doesn't exists
