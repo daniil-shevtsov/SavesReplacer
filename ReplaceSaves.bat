@@ -3,6 +3,7 @@ setlocal enabledelayedexpansion
 
 set GAMES_FILE_NAME=games.txt
 set PROFILES_FILE_NAME=profiles.txt
+set PROFILES_LOCATION=profiles
 
 echo 1 create profile
 echo 2 change profile
@@ -19,7 +20,9 @@ if "%ERRORLEVEL%" == "1" (
 		echo profile !profileName! already exists
 	) || (
 		echo !profileName! created.
+		
 		echo !profileName! >> %PROFILES_FILE_NAME%
+		mkdir %PROFILES_LOCATION%\!profileName!
 	)
 )
 goto comment  
