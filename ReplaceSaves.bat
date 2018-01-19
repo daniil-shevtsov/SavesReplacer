@@ -11,11 +11,11 @@ set PROFILES_LOCATION=profiles
 if not exist %GAMES_FILE_NAME% type nul>%GAMES_FILE_NAME%
 if not exist %PROFILES_FILE_NAME% type nul>%PROFILES_FILE_NAME%
 if not exist %CURRENT_PROFILE_FILE_NAME% type nul>%CURRENT_PROFILE_FILE_NAME%
-	
+
+:menu
 REM get name of current profile
 set /p currentProfile=<%CURRENT_PROFILE_FILE_NAME%
 
-:menu
 REM menu promt
 echo current profile: !currentProfile!
 echo 1 create profile
@@ -62,7 +62,7 @@ REM choose another profile
 	REM check that such profile exists
 	>nul find "!profileName!" %PROFILES_FILE_NAME% && (
 		REM parse games file for game names and save locations
-		for /F "tokens=1,2 delims=# " %%i in (%GAMES_FILE_NAME%) do (
+		for /F "tokens=1,2 delims=#" %%i in (%GAMES_FILE_NAME%) do (
 			echo "%%i" and "%%j"
 			REM copy current profile saves to its directory
 			robocopy "%%j" "%PROFILES_LOCATION%\!currentProfile!\%%i" /e /njh /njs /ndl /nc /ns
@@ -87,7 +87,7 @@ REM add new game
 	
 	REM append game name and save location to games file
 	(
-		echo ^#!gameName! ^#!savesLocation!
+		echo ^#!gameName!^#!savesLocation!
 	) >> %GAMES_FILE_NAME%
 	
 	REM copy saves of this game to every profile
