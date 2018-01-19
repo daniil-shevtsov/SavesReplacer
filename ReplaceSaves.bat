@@ -41,13 +41,13 @@ if "%ERRORLEVEL%" == "1" (
 		
 		REM create new profile directory
 		echo !profileName!>>%PROFILES_FILE_NAME%
-		mkdir %PROFILES_LOCATION%\!profileName!
+		mkdir "%PROFILES_LOCATION%\!profileName!"
 		
 		REM parse games file for game names and saves locations
 		for /F "tokens=1,2 delims=# " %%i in (%GAMES_FILE_NAME%) do (
 			echo "%%i" and "%%j"
 			REM create game directory
-			mkdir %PROFILES_LOCATION%\!profileName!\%%i
+			mkdir "%PROFILES_LOCATION%\!profileName!\%%i"
 			REM copy game saves to this profile directory
 			robocopy "%%j" "%PROFILES_LOCATION%\!profileName!\%%i" /e /njh /njs /ndl /nc /ns
 		)
@@ -79,7 +79,7 @@ REM add new game
 	REM read new game name
 	echo write game name
 	set /p gameName=
-	echo !gameName!
+	echo "!gameName!"
 	REM read location of saves
 	echo write saves location
 	set /p savesLocation=
@@ -93,7 +93,7 @@ REM add new game
 	REM copy saves of this game to every profile
 	for /F "tokens=*" %%A in (%PROFILES_FILE_NAME%) do (
 		echo "%%A"
-		mkdir %PROFILES_LOCATION%\%%A\!gameName!
+		mkdir "%PROFILES_LOCATION%\%%A\!gameName!"
 		robocopy "!savesLocation!" "%PROFILES_LOCATION%\%%A\!gameName!" /e /njh /njs /ndl /nc /ns
 	) 
 ) else if "%ERRORLEVEL%" == "4" (
