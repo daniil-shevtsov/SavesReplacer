@@ -25,7 +25,19 @@ if "%ERRORLEVEL%" == "1" (
 		mkdir %PROFILES_LOCATION%\!profileName!
 	)
 ) else if "%ERRORLEVEL%" == "2" (
-	echo two
+	echo write profile name
+	set /p profileName=
+	echo "!profileName!"
+	
+	>nul find "!profileName!" %PROFILES_FILE_NAME% && (
+		for /F "tokens=1,2 delims=# " %%i in (%GAMES_FILE_NAME%) do (
+			echo "%%i" and "%%j"
+			
+			
+		) 
+	) || (
+		echo profile "!profileName!" doesn't exists
+	)
 ) else if "%ERRORLEVEL%" == "3" (
 	echo write game name
 	set /p gameName=
