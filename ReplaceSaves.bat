@@ -49,7 +49,7 @@ if "%ERRORLEVEL%" == "1" (
 			REM create game directory
 			mkdir %PROFILES_LOCATION%\!profileName!\%%i
 			REM copy game saves to this profile directory
-			robocopy %%j %PROFILES_LOCATION%\!profileName!\%%i /e /njh /njs /ndl /nc /ns
+			robocopy "%%j" "%PROFILES_LOCATION%\!profileName!\%%i" /e /njh /njs /ndl /nc /ns
 		)
 	)
 REM choose another profile
@@ -65,9 +65,9 @@ REM choose another profile
 		for /F "tokens=1,2 delims=# " %%i in (%GAMES_FILE_NAME%) do (
 			echo "%%i" and "%%j"
 			REM copy current profile saves to its directory
-			robocopy %%j %PROFILES_LOCATION%\!currentProfile!\%%i /e /njh /njs /ndl /nc /ns
+			robocopy "%%j" "%PROFILES_LOCATION%\!currentProfile!\%%i" /e /njh /njs /ndl /nc /ns
 			REM replace current saves with saves of new profile
-			robocopy %PROFILES_LOCATION%\!profileName!\%%i %%j /e /njh /njs /ndl /nc /ns
+			robocopy "%PROFILES_LOCATION%\!profileName!\%%i" "%%j" /e /njh /njs /ndl /nc /ns
 		)
 		REM save new current profile name
 		echo !profileName!>%CURRENT_PROFILE_FILE_NAME%
@@ -94,7 +94,7 @@ REM add new game
 	for /F "tokens=*" %%A in (%PROFILES_FILE_NAME%) do (
 		echo "%%A"
 		mkdir %PROFILES_LOCATION%\%%A\!gameName!
-		robocopy !savesLocation! %PROFILES_LOCATION%\%%A\!gameName! /e /njh /njs /ndl /nc /ns
+		robocopy "!savesLocation!" "%PROFILES_LOCATION%\%%A\!gameName!" /e /njh /njs /ndl /nc /ns
 	) 
 ) else if "%ERRORLEVEL%" == "4" (
 	goto exit
