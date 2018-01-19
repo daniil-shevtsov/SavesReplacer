@@ -13,7 +13,7 @@ choice /C 123 /n
 if "%ERRORLEVEL%" == "1" (
 	echo write profile name
 	set /p profileName=
-	echo !profileName!
+	echo "!profileName!"
 	echo %PROFILES_FILE_NAME%
 
 	>nul find "!profileName!" %PROFILES_FILE_NAME% && (
@@ -21,30 +21,30 @@ if "%ERRORLEVEL%" == "1" (
 	) || (
 		echo !profileName! created.
 		
-		echo !profileName! >> %PROFILES_FILE_NAME%
+		echo !profileName!>>%PROFILES_FILE_NAME%
 		mkdir %PROFILES_LOCATION%\!profileName!
 	)
-)
-goto comment  
-else if "%ERRORLEVEL%" == "2" (
-	
+) else if "%ERRORLEVEL%" == "2" (
 	echo two
-) 
-
-else if "%ERRORLEVEL%" == "3" (
+) else if "%ERRORLEVEL%" == "3" (
 	echo write game name
 	set /p gameName=
-	echo %gameName%
+	echo !gameName!
 
 	echo write saves location
 	set /p savesLocation=
-	echo %savesLocation%
+	echo !savesLocation!
 	(
-		echo ^#%gameName% ^#%savesLocation%
+		echo ^#!gameName! ^#!savesLocation!
 	) >> %GAMES_FILE_NAME%
+	
+	for /F "tokens=*" %%A in (%PROFILES_FILE_NAME%) do (
+		echo "%%A"
+		mkdir %PROFILES_LOCATION%\%%A\!gameName!
+		robocopy !savesLocation! %PROFILES_LOCATION%\%%A\!gameName! /e
+	) 
 )
-
-
+goto comment 
 mkdir %gameName%
 mkdir %~dp0\%gameName%\%profileName%
 robocopy %savesLocation% %~dp0\%gameName%\%profileName% /e
