@@ -8,8 +8,16 @@ set CURRENT_PROFILE_FILE_NAME=currentProfile.txt
 REM location of profiles
 set PROFILES_LOCATION=profiles
 
+if not exist %GAMES_FILE_NAME% type nul>%GAMES_FILE_NAME%
+if not exist %PROFILES_FILE_NAME% type nul>%PROFILES_FILE_NAME%
+if not exist %CURRENT_PROFILE_FILE_NAME% type nul>%CURRENT_PROFILE_FILE_NAME%
+	
+REM get name of current profile
+set /p currentProfile=<%CURRENT_PROFILE_FILE_NAME%
+
 :menu
 REM menu promt
+echo current profile: !currentProfile!
 echo 1 create profile
 echo 2 choose profile
 echo 3 add game
@@ -46,8 +54,6 @@ if "%ERRORLEVEL%" == "1" (
 	)
 REM choose another profile
 ) else if "%ERRORLEVEL%" == "2" (
-	REM get name of current profile
-	set /p currentProfile=<%CURRENT_PROFILE_FILE_NAME%
 	
 	REM read name of profile to which we switch
 	echo write profile name
