@@ -8,13 +8,10 @@ set CURRENT_PROFILE_FILE_NAME=currentProfile.txt
 REM location of profiles
 set PROFILES_LOCATION=profiles
 
-<<<<<<< HEAD
 REM save type codes
 set DIRECTORY_SAVE_CHAR=d
 set REGISTRY_SAVE_CHAR=r
 
-=======
->>>>>>> origin/master
 if not exist %GAMES_FILE_NAME% type nul>%GAMES_FILE_NAME%
 if not exist %PROFILES_FILE_NAME% type nul>%PROFILES_FILE_NAME%
 if not exist %CURRENT_PROFILE_FILE_NAME% type nul>%CURRENT_PROFILE_FILE_NAME%
@@ -83,7 +80,6 @@ REM choose another profile
 	)
 REM add new game
 ) else if "%ERRORLEVEL%" == "3" (
-<<<<<<< HEAD
 	REM read save type ^(directory or registry key^)
 	echo write save type ^(^'d^' for directory or ^'r^' for registry key^)
 	set /p saveType=
@@ -121,7 +117,7 @@ REM add new game
 	)
 	
 	
-=======
+
 	REM read new game name
 	echo write game name
 	set /p gameName=
@@ -142,7 +138,6 @@ REM add new game
 		mkdir "%PROFILES_LOCATION%\%%A\!gameName!"
 		robocopy "!savesLocation!" "%PROFILES_LOCATION%\%%A\!gameName!" /e /njh /njs /ndl /nc /ns
 	) 
->>>>>>> origin/master
 ) else if "%ERRORLEVEL%" == "4" (
 	goto exit
 )
