@@ -47,13 +47,14 @@ if "%ERRORLEVEL%" == "1" (
 		echo !profileName!>>%PROFILES_FILE_NAME%
 		mkdir "%PROFILES_LOCATION%\!profileName!"
 		
+		REM add games to this profile directory
 		REM parse games file for game names and saves locations
-		for /F "tokens=1,2 delims=# " %%i in (%GAMES_FILE_NAME%) do (
-			echo "%%i" and "%%j"
+		for /F "tokens=1,2,3 delims=# " %%A in (%GAMES_FILE_NAME%) do (
+			echo name: "%%A" location: "%%B" type: "%%C"
 			REM create game directory
-			mkdir "%PROFILES_LOCATION%\!profileName!\%%i"
+			mkdir "%PROFILES_LOCATION%\!profileName!\%%A"
 			REM copy game saves to this profile directory
-			robocopy "%%j" "%PROFILES_LOCATION%\!profileName!\%%i" /e /njh /njs /ndl /nc /ns
+			robocopy "%%B" "%PROFILES_LOCATION%\!profileName!\%%A" /e /njh /njs /ndl /nc /ns
 		)
 	)
 REM choose another profile
@@ -66,12 +67,12 @@ REM choose another profile
 	REM check that such profile exists
 	>nul find "!profileName!" %PROFILES_FILE_NAME% && (
 		REM parse games file for game names and save locations
-		for /F "tokens=1,2 delims=#" %%i in (%GAMES_FILE_NAME%) do (
-			echo "%%i" and "%%j"
+		for /F "tokens=1,2,3 delims=#" %%A in (%GAMES_FILE_NAME%) do (
+			echo name: "%%A" location: "%%B" type: "%%C"
 			REM copy current profile saves to its directory
-			robocopy "%%j" "%PROFILES_LOCATION%\!currentProfile!\%%i" /e /njh /njs /ndl /nc /ns
+			robocopy "%%j" "%PROFILES_LOCATION%\!currentProfile!\%%A" /e /njh /njs /ndl /nc /ns
 			REM replace current saves with saves of new profile
-			robocopy "%PROFILES_LOCATION%\!profileName!\%%i" "%%j" /e /njh /njs /ndl /nc /ns
+			robocopy "%PROFILES_LOCATION%\!profileName!\%%A" "%%B" /e /njh /njs /ndl /nc /ns
 		)
 		REM save new current profile name
 		echo !profileName!>%CURRENT_PROFILE_FILE_NAME%
@@ -85,7 +86,10 @@ REM add new game
 	set /p saveType=
 	echo "!saveType!"
 	
+	REM check save type
 	if "!saveType!" == "%DIRECTORY_SAVE_CHAR%" (
+		REM saves in directory
+		
 		echo directory save
 		REM read new game name
 		echo write game name
@@ -109,38 +113,18 @@ REM add new game
 			robocopy "!savesLocation!" "%PROFILES_LOCATION%\%%A\!gameName!" /e /njh /njs /ndl /nc /ns
 		) 
 	) else if "!saveType!" == "%REGISTRY_SAVE_CHAR%" (
+		REM saves in registry key
 		echo registry save
+		REG E
 	) else (
+		REM incorrect save type char
 		echo save type "!saveType!" is not recognized
-		echo %REGISTRY_SAVE_CHAR%
-		echo "%REGISTRY_SAVE_CHAR%"
 	)
-	
-	
-
-	REM read new game name
-	echo write game name
-	set /p gameName=
-	echo "!gameName!"
-	REM read location of saves
-	echo write saves location
-	set /p savesLocation=
-	echo !savesLocation!
-	
-	REM append game name and save location to games file
-	(
-		echo ^#!gameName!^#!savesLocation!
-	) >> %GAMES_FILE_NAME%
-	
-	REM copy saves of this game to every profile
-	for /F "tokens=*" %%A in (%PROFILES_FILE_NAME%) do (
-		echo "%%A"
-		mkdir "%PROFILES_LOCATION%\%%A\!gameName!"
-		robocopy "!savesLocation!" "%PROFILES_LOCATION%\%%A\!gameName!" /e /njh /njs /ndl /nc /ns
-	) 
 ) else if "%ERRORLEVEL%" == "4" (
 	goto exit
 )
 goto menu
 :exit
 PAUSE
+
+:
